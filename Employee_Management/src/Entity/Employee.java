@@ -18,4 +18,16 @@ public class Employee {
     public String getFirstName() {
         return firstName;
     }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public Date getDateOfBirth(){
+        return dateOfBirth;
+    }
+    public double getExperience(){
+        return experience;
+    }
+    
 }
