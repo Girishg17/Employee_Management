@@ -15,4 +15,7 @@ public class Employee {
         this.experience=experience;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
 }
