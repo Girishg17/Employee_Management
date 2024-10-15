@@ -2,8 +2,6 @@ package Repository;
 
 import Entity.Employee;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class MyCollection {
     private static Employee[] employees = new Employee[300];

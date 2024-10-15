@@ -68,6 +68,7 @@ public class JsonFileHandler implements MyFileHandler {
                 Date dateOfBirth = dateFormat.parse(dateOfBirthStr);
 
                 // Create Employee object
+//                System.out.println(firstName+"'"+lastName);
                 Employee employee = new Employee(firstName, lastName, dateOfBirth, experience);
                 MyCollection.add(employee);
             }
