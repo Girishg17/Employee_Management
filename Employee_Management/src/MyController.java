@@ -11,15 +11,15 @@ public class MyController {
     private MyFileHandler jsonHandler = new JsonFileHandler("/Users/girishggonda/Downloads/MOCK_DATA.json");
 
     public void loadData() throws InterruptedException {
-        //Thread csvThread = new Thread(() -> csvHandler.read());
+        Thread csvThread = new Thread(() -> csvHandler.read());
        // Thread xmlThread = new Thread(() -> xmlHandler.read());
         Thread jsonThread = new Thread(() -> jsonHandler.read());
 
-       // csvThread.start();
+        csvThread.start();
       //  xmlThread.start();
         jsonThread.start();
 
-        //csvThread.join();
+        csvThread.join();
       //  xmlThread.join();
         jsonThread.join();
 
@@ -27,16 +27,16 @@ public class MyController {
     }
 
     public void saveData() {
-//        Thread csvThread = new Thread(() -> csvHandler.write());
+    Thread csvThread = new Thread(() -> csvHandler.write());
 //        Thread xmlThread = new Thread(() -> xmlHandler.write());
         Thread jsonThread = new Thread(() -> jsonHandler.write());
 
-//        csvThread.start();
+     csvThread.start();
 //        xmlThread.start();
         jsonThread.start();
 
         try {
-//            csvThread.join();
+             csvThread.join();
 //            xmlThread.join();
             jsonThread.join();
         } catch (InterruptedException e) {

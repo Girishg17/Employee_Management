@@ -66,13 +66,7 @@ public class JsonFileHandler implements MyFileHandler {
                 // Create Employee object
                 Employee employee = new Employee(firstName, lastName, dateOfBirth, experience);
 
-                // Output results without extra labels
-                System.out.println(firstName);
-                System.out.println(lastName);
-                System.out.println(dateOfBirthStr);
-                System.out.println(experience);
 
-                // Add to collection
                 MyCollection.add(employee);
             }
         } catch (IOException | ParseException e) {
