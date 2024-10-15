@@ -1,8 +1,13 @@
 package Interface.Implementation;
 
+import Entity.Employee;
 import Interface.MyFileHandler;
+import Repository.MyCollection;
 
 import java.io.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class XMLFileHandler implements MyFileHandler {
     private String filePath;
@@ -13,13 +18,23 @@ public class XMLFileHandler implements MyFileHandler {
 
 
     public void read() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
-                System.out.println("XML Data: " + line);
+                // Split the line assuming the format is "firstName,lastName"
+                String[] parts = line.split(",");
+
+                String firstName = parts[0].trim();
+                String lastName = parts[1].trim();
+                Date dateOfBirth = dateFormat.parse(parts[2].trim());
+                double experience= Double.parseDouble(parts[3].trim());
+                Employee employee = new Employee(firstName, lastName,dateOfBirth,experience);
+                MyCollection.add(employee);
+
             }
-        } catch (IOException e) {
-            System.out.println("Error reading XML file.");
+        } catch (IOException | ParseException e) {
+            System.out.println("Error reading CSV file.");
         }
     }
 
