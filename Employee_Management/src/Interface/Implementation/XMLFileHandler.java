@@ -44,7 +44,7 @@ public class XMLFileHandler implements MyFileHandler {
                 Date dateOfBirth = dateFormat.parse(dateOfBirthStr);
                 double experience = Double.parseDouble(experienceStr);
 
-               
+
                 Employee employee = new Employee(firstName, lastName, dateOfBirth, experience);
                 MyCollection.add(employee);
 

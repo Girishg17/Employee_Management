@@ -73,6 +73,7 @@ public class JsonFileHandler implements MyFileHandler {
                 MyCollection.add(employee);
             }
         } catch (IOException | ParseException e) {
+
             System.out.println(e);
         }
     }
@@ -80,6 +81,11 @@ public class JsonFileHandler implements MyFileHandler {
 
 
     public void write() {
+                Employee person;
 
+                for(int i=0;i<100;i++){
+                    person=MyCollection.get();
+                    System.out.println(i+"->"+person.firstName);
+                }
     }
 }
