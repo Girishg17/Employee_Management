@@ -5,11 +5,12 @@ import Interface.MyFileHandler;
 import Repository.MyCollection;
 
 import java.io.*;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-
-
+import java.util.List;
 
 
 public class JsonFileHandler implements MyFileHandler {
@@ -19,110 +20,68 @@ public class JsonFileHandler implements MyFileHandler {
         this.filePath = filePath;
     }
 
-
-//    public void read() {
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-//            String line;
-//
-//            while ((line = br.readLine()) != null) {
-//                System.out.println(line);
-//                String[] parts = line.split(",");
-//
-//                String firstName = parts[0].trim();
-//                String lastName = parts[1].trim();
-//                Date dateOfBirth = dateFormat.parse(parts[2].trim());
-//                double experience= Double.parseDouble(parts[3].trim());
-//                Employee employee = new Employee(firstName, lastName,dateOfBirth,experience);
-//                MyCollection.add(employee);
-//            }
-//        } catch (IOException | ParseException e) {
-//            System.out.println(e);
-//        }
-//    }
-
-
     public void read() {
-        // Define the accepted date formats
-        String[] dateFormats = {
-                "MM-dd-yyyy",
-                "M-dd-yyyy",
-                "M-d-yyyy",
-                "MM-d-yyyy"
-        };
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
+
             while ((line = br.readLine()) != null) {
-                // Split the line assuming the format is "firstName,lastName,dateOfBirth,experience"
+                // Clean the line and parse the fields
+                line = line.trim().replace("{", "").replace("}", "").replace("\"", "");
                 String[] parts = line.split(",");
-                if (parts.length >= 4) { // Ensure there are enough parts
-                    String firstName = parts[0].trim();
-                    String lastName = parts[1].trim();
-                   // System.out.println("lastname"+lastName);
-                    String dateString = parts[2].trim();
 
-                    String experienceString = parts[3].trim();
-                    experienceString = experienceString.replaceAll("\"experience\":", "").replace("}", "").trim();
-                   // System.out.println("eperience"+experienceString);
+                String firstName = "";
+                String lastName = "";
+                String dateOfBirthStr = "";
+                double experience = 0;
 
-                    // Validate and parse experience
-                    double experience = 0.0;
-                    if (!experienceString.isEmpty()) {
-                        try {
-                            experience = Double.parseDouble(experienceString);
-                        } catch (NumberFormatException e) {
-                            System.out.println("Invalid experience value: " + experienceString);
-                            continue; // Skip this entry if experience is invalid
-                        }
-                    } else {
-                        System.out.println("Experience value is empty, skipping entry for: " + firstName + " " + lastName);
-                        continue; // Skip this entry if experience is empty
-                    }
+                // Extract values from the parts
+                for (String part : parts) {
+                    String[] keyValue = part.split(":");
+                    if (keyValue.length == 2) {
+                        String key = keyValue[0].trim();
+                        String value = keyValue[1].trim();
 
-                    Date dateOfBirth = null;
-                    boolean dateParsed = false;
-
-                    // Try each date format until one succeeds
-                    for (String format : dateFormats) {
-                        try {
-                            SimpleDateFormat dateFormat = new SimpleDateFormat(format);
-                            dateOfBirth = dateFormat.parse(dateString);
-                            dateParsed = true;
-                            break;
-                        } catch (ParseException e) {
-
-                            System.out.println(e);
+                        switch (key) {
+                            case "firstName":
+                                firstName = value;
+                                break;
+                            case "lastName":
+                                lastName = value;
+                                break;
+                            case "dateOfBirth":
+                                dateOfBirthStr = value;
+                                break;
+                            case "experience":
+                                experience = Double.parseDouble(value);
+                                break;
                         }
                     }
-
-//                    if (!dateParsed) {
-//                        System.out.println("Error parsing date: " + dateString);
-//                        continue; // Skip this entry if all formats fail
-//                    }
-
-                    Employee employee = new Employee(firstName, lastName, dateOfBirth, experience);
-                    System.out.println("employeeedata"+employee.firstName+employee.experience+employee.dateOfBirth);
-                    MyCollection.add(employee); // Call to add the employee
-                } else {
-                    System.out.println("Insufficient data in line: " + line);
                 }
+
+                // Parse the date
+                Date dateOfBirth = dateFormat.parse(dateOfBirthStr);
+
+                // Create Employee object
+                Employee employee = new Employee(firstName, lastName, dateOfBirth, experience);
+
+                // Output results without extra labels
+                System.out.println(firstName);
+                System.out.println(lastName);
+                System.out.println(dateOfBirthStr);
+                System.out.println(experience);
+
+                // Add to collection
+                MyCollection.add(employee);
             }
-        } catch (IOException e) {
-            System.out.println("Error reading CSV file.");
+        } catch (IOException | ParseException e) {
+            System.out.println(e);
         }
     }
-//    public  void read(){
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        JsonNode jsonNode = objectMapper.readTree(new File("mydata.json"));
-//    }
-    public void write() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, true))) {
-            bw.write("{\"firstName\":\"Saahil\",\"lastName\":\"faizal\",\"dateOfBirth\":\"17/10/2001\",\"experience\":7}");
-            System.out.println("Wrote to JSON file.success");
-        } catch (IOException e){
 
-            System.out.println("Error writing to JSON file.");
-        }
+
+    public void write() {
+
     }
 }
