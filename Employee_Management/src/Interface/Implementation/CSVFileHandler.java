@@ -57,12 +57,7 @@ public class CSVFileHandler implements MyFileHandler {
         }
     }
     public void write() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, true))) {
-            bw.write("saahil,faizal,17/10/2001\n"); // Writing sample data
-            System.out.println("successs...Wrote to CSV file.");
-        } catch (IOException e) {
-            System.out.println("Error writing to CSV file.");
-        }
+
     }
 }
 
