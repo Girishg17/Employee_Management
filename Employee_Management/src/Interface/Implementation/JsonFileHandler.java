@@ -43,6 +43,7 @@ public class JsonFileHandler implements MyFileHandler {
                     if (keyValue.length == 2) {
                         String key = keyValue[0].trim();
                         String value = keyValue[1].trim();
+//                        System.out.println("key"+key+"->"+ "value ->"+value);
 
                         // Clean the value to handle trailing characters
 
@@ -50,7 +51,7 @@ public class JsonFileHandler implements MyFileHandler {
                             case "firstName":
                                 firstName = value;
                                 break;
-                            case "lastName":
+                            case "lastname":
                                 lastName = value;
                                 break;
                             case "dateOfBirth":
@@ -68,7 +69,6 @@ public class JsonFileHandler implements MyFileHandler {
                 Date dateOfBirth = dateFormat.parse(dateOfBirthStr);
 
                 // Create Employee object
-//                System.out.println(firstName+"'"+lastName);
                 Employee employee = new Employee(firstName, lastName, dateOfBirth, experience);
                 MyCollection.add(employee);
             }
@@ -79,13 +79,30 @@ public class JsonFileHandler implements MyFileHandler {
     }
 
 
-
     public void write() {
-                Employee person;
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/girishggonda/Desktop/output.json"))) {
+            writer.write("[");
+            for (int i = 0; i < 100; i++) {
+                Employee person = MyCollection.get();
+//                System.out.println("lastname ->"+person.lastName);
+                String jsonRecord = String.format(
+                        "{\"firstName\":\"%s\", \"lastName\":\"%s\", \"dateOfBirth\":\"%s\", \"experience\":%f}",
+                        person.getFirstName(),
+                        person.getLastName(),
+                        new SimpleDateFormat("MM/dd/yyyy").format(person.getDateOfBirth()),
+                        person.getExperience()
+                );
 
-                for(int i=0;i<100;i++){
-                    person=MyCollection.get();
-                    System.out.println(i+"->"+person.firstName);
+                writer.write(jsonRecord);
+
+                if (i < 99) {
+                    writer.write(","); // Add a comma after each record except the last one
                 }
+            }
+            writer.write("]"); // End of JSON array
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 }
