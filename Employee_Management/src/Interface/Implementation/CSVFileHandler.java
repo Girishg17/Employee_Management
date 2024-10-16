@@ -8,7 +8,9 @@ import java.io.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class CSVFileHandler implements MyFileHandler {
     private String filePath;
@@ -20,6 +22,9 @@ public class CSVFileHandler implements MyFileHandler {
 
     public void read() {
         DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        Employee employee = new Employee();
+        List<Employee> tempList = new ArrayList<>();
+
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -44,10 +49,19 @@ public class CSVFileHandler implements MyFileHandler {
                 Date dateOfBirth = dateFormat.parse(date);
                 double experience = Double.parseDouble(parts[3].trim());
 
-                // Create Employee object and add to collection
-                Employee employee = new Employee(firstName, lastName, dateOfBirth, experience);
-                MyCollection.add(employee);
+
+                employee.setFirstName(firstName);
+                employee.setLastName(lastName);
+                employee.setDateOfBirth(dateOfBirth);
+                employee.setExperience(experience);
+
+                // Add to temporary list
+                tempList.add(new Employee(employee));
             }
+
+            // Add all employees to MyCollection at once
+            MyCollection.addAll(tempList);
+
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
         } catch (ParseException e) {
@@ -56,19 +70,23 @@ public class CSVFileHandler implements MyFileHandler {
             System.out.println("NumberFormatException: " + e.getMessage());
         }
     }
+
+
     public void write() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/saahilmfaizal/Desktop/output.csv"))) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/girishggonda/Desktop/output.csv"))) {
             writer.write("firstName,lastName,dateOfBirth,experience\n"); // Header
 
             Employee person;
-            for (int i = 0; i < 100; i++) { // Adjust the loop range as needed
+            for (int i = 0; i < 100; i++) {
                 person = MyCollection.get();
+
                 String csvRecord = String.format(
-                        "%s,%s,%s,%f\n", // Removed quotes
+                        "%s,%s,%s,%d\n",
                         person.getFirstName(),
                         person.getLastName(),
-                        new SimpleDateFormat("MM/dd/yyyy").format(person.getDateOfBirth()),
-                        person.getExperience()
+                        dateFormat.format(person.getDateOfBirth()),
+                        (int) person.getExperience()
                 );
 
                 writer.write(csvRecord);

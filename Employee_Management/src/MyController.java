@@ -6,48 +6,44 @@ import Repository.MyCollection;
 
 public class MyController {
     private MyCollection collection = new MyCollection();
-    private MyFileHandler csvHandler = new CSVFileHandler("/Users/saahilmfaizal/Downloads/MOCK_DATA.csv");
-    private MyFileHandler xmlHandler = new XMLFileHandler("/Users/saahilmfaizal/Downloads/dataset.xml");
-    private MyFileHandler jsonHandler = new JsonFileHandler("/Users/saahilmfaizal/Downloads/MOCK_DATA.json");
+    private MyFileHandler csvHandler = new CSVFileHandler("/Users/girishggonda/Downloads/MOCK_DATA.csv");
+    private MyFileHandler xmlHandler = new XMLFileHandler("/Users/girishggonda/Downloads/dataset.xml");
+    private MyFileHandler jsonHandler = new JsonFileHandler("/Users/girishggonda/Downloads/MOCK_DATA.json");
 
     public void loadData() throws InterruptedException {
-       Thread csvThread = new Thread(() -> csvHandler.read());
-       Thread xmlThread = new Thread(() -> xmlHandler.read());
+        Thread csvThread = new Thread(() -> csvHandler.read());
+        Thread xmlThread = new Thread(() -> xmlHandler.read());
         Thread jsonThread = new Thread(() -> jsonHandler.read());
 
-       csvThread.start();
+        csvThread.start();
         xmlThread.start();
-       jsonThread.start();
+        jsonThread.start();
 
-       csvThread.join();
+        csvThread.join();
         xmlThread.join();
-       jsonThread.join();
+        jsonThread.join();
 
         System.out.println("Write Counter " + collection.getWriteCounter());
     }
 
     public void saveData() {
-   Thread csvThread = new Thread(() -> csvHandler.write());
-    Thread xmlThread = new Thread(() -> xmlHandler.write());
-       Thread jsonThread = new Thread(() -> jsonHandler.write());
+        Thread csvThread = new Thread(() -> csvHandler.write());
+        Thread xmlThread = new Thread(() -> xmlHandler.write());
+        Thread jsonThread = new Thread(() -> jsonHandler.write());
 
-    csvThread.start();
-      xmlThread.start();
-       jsonThread.start();
+        csvThread.start();
+        xmlThread.start();
+        jsonThread.start();
 
         try {
-           csvThread.join();
-           xmlThread.join();
+            csvThread.join();
+            xmlThread.join();
             jsonThread.join();
-            System.out.println("Read Counter "+collection.getReadCounter());
+            System.out.println("Read Counter " + collection.getReadCounter());
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        MyController controller = new MyController();
-        controller.loadData();
-        controller.saveData();
-    }
+
 }

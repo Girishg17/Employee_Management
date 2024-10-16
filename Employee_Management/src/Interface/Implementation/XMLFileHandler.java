@@ -7,7 +7,9 @@ import Repository.MyCollection;
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class XMLFileHandler implements MyFileHandler {
     private String filePath;
@@ -18,12 +20,14 @@ public class XMLFileHandler implements MyFileHandler {
 
 
     public void read() {
+        Employee employee = new Employee(); // Create a single instance to reuse
+        List<Employee> tempList = new ArrayList<>(); // Temporary list to hold employees
+
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             StringBuilder xmlContent = new StringBuilder();
 
             while ((line = br.readLine()) != null) {
-
                 xmlContent.append(line);
             }
 
@@ -45,11 +49,20 @@ public class XMLFileHandler implements MyFileHandler {
                 double experience = Double.parseDouble(experienceStr);
 
 
-                Employee employee = new Employee(firstName, lastName, dateOfBirth, experience);
-                MyCollection.add(employee);
+//                Employee employee = new Employee(firstName, lastName, dateOfBirth, experience);
+//                MyCollection.add(employee);
+
+                employee.setFirstName(firstName);
+                employee.setLastName(lastName);
+                employee.setDateOfBirth(dateOfBirth);
+                employee.setExperience(experience);
+
+                // Add to temporary list
+                tempList.add(new Employee(employee));
 
                 startIndex = endIndex + endRecordTag.length();
             }
+            MyCollection.addAll(tempList);
         } catch (IOException | ParseException e) {
             System.out.println(e);
         }
@@ -64,17 +77,16 @@ public class XMLFileHandler implements MyFileHandler {
     }
 
 
-
     public void write() {
 
-      try(BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/saahilmfaizal/Desktop/output.xml"))) {
-          Employee person;
-          for(int i=200;i<300;i++){
-              person = MyCollection.get();
-              writer.write("  <record>\n    <firstName>" + person.firstName + "</firstName>\n    <lastName>" + person.lastName + "</lastName>\n    <dateOfBirth>" + (new SimpleDateFormat("MM/dd/yyyy")).format(person.dateOfBirth) + "</dateOfBirth>\n    <experience>" + person.experience + "</experience>\n  </record>\n");
-          }
-      } catch (IOException e) {
-          throw new RuntimeException(e);
-      }
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/girishggonda/Desktop/output.xml"))) {
+            Employee person;
+            for (int i = 200; i < 300; i++) {
+                person = MyCollection.get();
+                writer.write("  <record>\n    <firstName>" + person.firstName + "</firstName>\n    <lastName>" + person.lastName + "</lastName>\n    <dateOfBirth>" + (new SimpleDateFormat("MM/dd/yyyy")).format(person.dateOfBirth) + "</dateOfBirth>\n    <experience>" + person.experience + "</experience>\n  </record>\n");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

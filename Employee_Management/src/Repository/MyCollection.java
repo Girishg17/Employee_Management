@@ -2,6 +2,7 @@ package Repository;
 
 import Entity.Employee;
 
+import java.util.List;
 
 public class MyCollection {
     private static Employee[] employees = new Employee[300];
@@ -19,13 +20,26 @@ public class MyCollection {
         if (readCounter < writeCounter) {
             return employees[readCounter++];
         }
-        return null; // or throw exception
+        return null; // or throw an exception
+    }
+
+    public static synchronized void addAll(List<Employee> tempList) {
+        for (Employee employee : tempList) {
+            if (writeCounter < 300) {
+                employees[writeCounter] = employee;
+                writeCounter++;
+            } else {
+                System.out.println("Employee array is full. Cannot add more employees.");
+                break; // Exit if the array is full
+            }
+        }
     }
 
     public int getWriteCounter() {
         return writeCounter;
     }
-    public int getReadCounter(){
+
+    public int getReadCounter() {
         return readCounter;
     }
 }

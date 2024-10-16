@@ -23,18 +23,21 @@ public class JsonFileHandler implements MyFileHandler {
 
     public void read() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        Employee employee = new Employee(); // Create a single instance to reuse
+        List<Employee> tempList = new ArrayList<>(); // Temporary list to hold employees
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
 
             while ((line = br.readLine()) != null) {
-                // Clean the line and parse the fields
-                line = line.trim().replace("{", "").replace("}", "").replace("\"", "");
+
+                line = line.trim().replace("{", "").replace("}", "").replace("[", "").replace("]", "").replace("\"", "");
                 String[] parts = line.split(",");
 
                 String firstName = "";
                 String lastName = "";
                 String dateOfBirthStr = "";
+                Date dateOfBirth = null;
                 double experience = 0;
 
                 // Extract values from the parts
@@ -43,9 +46,6 @@ public class JsonFileHandler implements MyFileHandler {
                     if (keyValue.length == 2) {
                         String key = keyValue[0].trim();
                         String value = keyValue[1].trim();
-//                        System.out.println("key"+key+"->"+ "value ->"+value);
-
-                        // Clean the value to handle trailing characters
 
                         switch (key) {
                             case "firstName":
@@ -56,20 +56,31 @@ public class JsonFileHandler implements MyFileHandler {
                                 break;
                             case "dateOfBirth":
                                 dateOfBirthStr = value;
+                                dateOfBirth = dateFormat.parse(dateOfBirthStr);
                                 break;
                             case "experience":
                                 value = value.replaceAll("[^0-9.]", "").trim(); // Remove any non-numeric characters
                                 experience = Double.parseDouble(value);
                                 break;
                         }
+                    } else {
+                        System.out.println("Incomplete records...");
                     }
                 }
-                Date dateOfBirth = dateFormat.parse(dateOfBirthStr);
 
-                // Create Employee object
-                Employee employee = new Employee(firstName, lastName, dateOfBirth, experience);
-                MyCollection.add(employee);
+
+//                Employee employee = new Employee(firstName, lastName, dateOfBirth, experience);
+//                MyCollection.add(employee);
+
+                employee.setFirstName(firstName);
+                employee.setLastName(lastName);
+                employee.setDateOfBirth(dateOfBirth);
+                employee.setExperience(experience);
+
+
+                tempList.add(new Employee(employee));
             }
+            MyCollection.addAll(tempList);
         } catch (IOException | ParseException e) {
 
             System.out.println(e);
@@ -78,11 +89,11 @@ public class JsonFileHandler implements MyFileHandler {
 
 
     public void write() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/saahilmfaizal/Desktop/output.json"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/girishggonda/Desktop/output.json"))) {
             writer.write("[");
             Employee person;
             for (int i = 0; i < 100; i++) {
-                    person = MyCollection.get();
+                person = MyCollection.get();
 //                System.out.println("lastname ->"+person.lastName);
                 String jsonRecord = String.format(
                         "{\"firstName\":\"%s\", \"lastName\":\"%s\", \"dateOfBirth\":\"%s\", \"experience\":%f}",
@@ -95,10 +106,10 @@ public class JsonFileHandler implements MyFileHandler {
                 writer.write(jsonRecord);
 
                 if (i < 99) {
-                    writer.write(","); // Add a comma after each record except the last one
+                    writer.write(",");
                 }
             }
-            writer.write("]"); // End of JSON array
+            writer.write("]");
         } catch (IOException e) {
             e.printStackTrace();
         }
