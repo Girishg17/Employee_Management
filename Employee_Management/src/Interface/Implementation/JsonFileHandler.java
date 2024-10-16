@@ -78,7 +78,7 @@ public class JsonFileHandler implements MyFileHandler {
 
 
     public void write() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/girishggonda/Desktop/output.json"))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/saahilmfaizal/Desktop/output.json"))) {
             writer.write("[");
             Employee person;
             for (int i = 0; i < 100; i++) {

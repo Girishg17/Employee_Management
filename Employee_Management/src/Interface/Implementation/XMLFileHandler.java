@@ -66,10 +66,15 @@ public class XMLFileHandler implements MyFileHandler {
 
 
     public void write() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath, true))) {
 
-        } catch (IOException e) {
-            System.out.println("Error writing to XML file.");
-        }
+      try(BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/saahilmfaizal/Desktop/output.xml"))) {
+          Employee person;
+          for(int i=200;i<300;i++){
+              person = MyCollection.get();
+              writer.write("  <record>\n    <firstName>" + person.firstName + "</firstName>\n    <lastName>" + person.lastName + "</lastName>\n    <dateOfBirth>" + (new SimpleDateFormat("MM/dd/yyyy")).format(person.dateOfBirth) + "</dateOfBirth>\n    <experience>" + person.experience + "</experience>\n  </record>\n");
+          }
+      } catch (IOException e) {
+          throw new RuntimeException(e);
+      }
     }
 }
