@@ -87,8 +87,10 @@ public class XMLFileHandler implements MyFileHandler {
             Employee person;
             for (int i = 0; i < 100; i++) {
                 person = MyCollection.get();
-                writer.write("  <record>\n    <firstName>" + person.firstName + "</firstName>\n    <lastName>" + person.lastName + "</lastName>\n    <dateOfBirth>" + dateFormat.format(person.dateOfBirth) + "</dateOfBirth>\n    <experience>" +(int) person.experience + "</experience>\n  </record>\n");
-            }
+                if(person!=null) {
+                    writer.write("  <record>\n    <firstName>" + person.firstName + "</firstName>\n    <lastName>" + person.lastName + "</lastName>\n    <dateOfBirth>" + dateFormat.format(person.dateOfBirth) + "</dateOfBirth>\n    <experience>" + (int) person.experience + "</experience>\n  </record>\n");
+                }
+                }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
