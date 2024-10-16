@@ -11,34 +11,35 @@ public class MyController {
     private MyFileHandler jsonHandler = new JsonFileHandler("/Users/girishggonda/Downloads/MOCK_DATA.json");
 
     public void loadData() throws InterruptedException {
-        Thread csvThread = new Thread(() -> csvHandler.read());
+       Thread csvThread = new Thread(() -> csvHandler.read());
         Thread xmlThread = new Thread(() -> xmlHandler.read());
-        Thread jsonThread = new Thread(() -> jsonHandler.read());
+       // Thread jsonThread = new Thread(() -> jsonHandler.read());
 
-        csvThread.start();
+       csvThread.start();
         xmlThread.start();
-        jsonThread.start();
+       // jsonThread.start();
 
-        csvThread.join();
+       csvThread.join();
         xmlThread.join();
-        jsonThread.join();
+     //   jsonThread.join();
 
-        System.out.println("Count of elements: " + collection.getWriteCounter());
+        System.out.println("Write Counter " + collection.getWriteCounter());
     }
 
     public void saveData() {
-   // Thread csvThread = new Thread(() -> csvHandler.write());
-//        Thread xmlThread = new Thread(() -> xmlHandler.write());
-        Thread jsonThread = new Thread(() -> jsonHandler.write());
+   Thread csvThread = new Thread(() -> csvHandler.write());
+    //Thread xmlThread = new Thread(() -> xmlHandler.write());
+       Thread jsonThread = new Thread(() -> jsonHandler.write());
 
-    // csvThread.start();
+    csvThread.start();
 //        xmlThread.start();
-        jsonThread.start();
+       jsonThread.start();
 
         try {
-            // csvThread.join();
+           csvThread.join();
 //            xmlThread.join();
             jsonThread.join();
+            System.out.println("Read Counter "+collection.getReadCounter());
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

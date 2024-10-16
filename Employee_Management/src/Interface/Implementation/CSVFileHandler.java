@@ -57,8 +57,27 @@ public class CSVFileHandler implements MyFileHandler {
         }
     }
     public void write() {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/girishggonda/Desktop/output.csv"))) {
+            writer.write("firstName,lastName,dateOfBirth,experience\n"); // Header
 
+            Employee person;
+            for (int i = 0; i < 100; i++) { // Adjust the loop range as needed
+                person = MyCollection.get();
+                String csvRecord = String.format(
+                        "%s,%s,%s,%f\n", // Removed quotes
+                        person.getFirstName(),
+                        person.getLastName(),
+                        new SimpleDateFormat("MM/dd/yyyy").format(person.getDateOfBirth()),
+                        person.getExperience()
+                );
+
+                writer.write(csvRecord);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
+
 }
 
 

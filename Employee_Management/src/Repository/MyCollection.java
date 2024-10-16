@@ -25,4 +25,7 @@ public class MyCollection {
     public int getWriteCounter() {
         return writeCounter;
     }
+    public int getReadCounter(){
+        return readCounter;
+    }
 }

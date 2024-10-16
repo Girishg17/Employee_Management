@@ -64,8 +64,6 @@ public class JsonFileHandler implements MyFileHandler {
                         }
                     }
                 }
-
-                // Parse the date
                 Date dateOfBirth = dateFormat.parse(dateOfBirthStr);
 
                 // Create Employee object
@@ -82,8 +80,9 @@ public class JsonFileHandler implements MyFileHandler {
     public void write() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/girishggonda/Desktop/output.json"))) {
             writer.write("[");
+            Employee person;
             for (int i = 0; i < 100; i++) {
-                Employee person = MyCollection.get();
+                    person = MyCollection.get();
 //                System.out.println("lastname ->"+person.lastName);
                 String jsonRecord = String.format(
                         "{\"firstName\":\"%s\", \"lastName\":\"%s\", \"dateOfBirth\":\"%s\", \"experience\":%f}",

@@ -23,8 +23,10 @@ public class XMLFileHandler implements MyFileHandler {
             StringBuilder xmlContent = new StringBuilder();
 
             while ((line = br.readLine()) != null) {
-                xmlContent.append(line.trim());
+
+                xmlContent.append(line);
             }
+
 
             String xml = xmlContent.toString();
             String recordTag = "<record>";
@@ -38,8 +40,6 @@ public class XMLFileHandler implements MyFileHandler {
                 String lastName = extractValue(record, "lastname");
                 String dateOfBirthStr = extractValue(record, "dateOfBirth");
                 String experienceStr = extractValue(record, "experience");
-
-                // Parse date and experience, then create Employee object if needed
                 SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
                 Date dateOfBirth = dateFormat.parse(dateOfBirthStr);
                 double experience = Double.parseDouble(experienceStr);
@@ -51,7 +51,7 @@ public class XMLFileHandler implements MyFileHandler {
                 startIndex = endIndex + endRecordTag.length();
             }
         } catch (IOException | ParseException e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
     }
 
