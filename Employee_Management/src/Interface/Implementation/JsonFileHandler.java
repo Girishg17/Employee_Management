@@ -71,7 +71,7 @@ public class JsonFileHandler implements MyFileHandler {
 //                MyCollection.add(employee);
 
 
-                tempList.add(employee);
+                tempList.add(new Employee(employee));
             }
             MyCollection.addAll(tempList);
         } catch (ParseException e) {

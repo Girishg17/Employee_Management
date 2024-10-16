@@ -54,7 +54,7 @@ public class CSVFileHandler implements MyFileHandler {
                 employee.setDateOfBirth(dateOfBirth);
                 employee.setExperience(experience);
 
-                tempList.add(employee);
+                tempList.add(new Employee(employee));
             }
 
             // Add all employees to MyCollection at once

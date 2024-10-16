@@ -58,7 +58,7 @@ public class XMLFileHandler implements MyFileHandler {
                 employee.setExperience(experience);
 
 
-                tempList.add(employee);
+                tempList.add(new Employee(employee));
 
                 startIndex = endIndex + endRecordTag.length();
             }
