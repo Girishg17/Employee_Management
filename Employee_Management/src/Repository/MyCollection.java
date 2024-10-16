@@ -20,7 +20,7 @@ public class MyCollection {
         if (readCounter < writeCounter) {
             return employees[readCounter++];
         }
-        return null; // or throw an exception
+        return null;
     }
 
     public static synchronized void addAll(List<Employee> tempList) {

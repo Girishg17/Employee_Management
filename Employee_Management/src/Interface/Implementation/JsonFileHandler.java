@@ -23,8 +23,8 @@ public class JsonFileHandler implements MyFileHandler {
 
     public void read() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        Employee employee = new Employee(); // Create a single instance to reuse
-        List<Employee> tempList = new ArrayList<>(); // Temporary list to hold employees
+        Employee employee = new Employee();
+        List<Employee> tempList = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -33,12 +33,8 @@ public class JsonFileHandler implements MyFileHandler {
 
                 line = line.trim().replace("{", "").replace("}", "").replace("[", "").replace("]", "").replace("\"", "");
                 String[] parts = line.split(",");
-
-                String firstName = "";
-                String lastName = "";
-                String dateOfBirthStr = "";
-                Date dateOfBirth = null;
-                double experience = 0;
+                Date dateOfBirth;
+                double experience;
 
                 // Extract values from the parts
                 for (String part : parts) {
@@ -49,18 +45,20 @@ public class JsonFileHandler implements MyFileHandler {
 
                         switch (key) {
                             case "firstName":
-                                firstName = value;
+                                employee.setFirstName(value);
                                 break;
                             case "lastname":
-                                lastName = value;
+                                employee.setLastName(value);
                                 break;
                             case "dateOfBirth":
-                                dateOfBirthStr = value;
-                                dateOfBirth = dateFormat.parse(dateOfBirthStr);
+
+                                dateOfBirth = dateFormat.parse(value);
+                                employee.setDateOfBirth(dateOfBirth);
                                 break;
                             case "experience":
                                 value = value.replaceAll("[^0-9.]", "").trim(); // Remove any non-numeric characters
                                 experience = Double.parseDouble(value);
+                                employee.setExperience(experience);
                                 break;
                         }
                     } else {
@@ -72,19 +70,20 @@ public class JsonFileHandler implements MyFileHandler {
 //                Employee employee = new Employee(firstName, lastName, dateOfBirth, experience);
 //                MyCollection.add(employee);
 
-                employee.setFirstName(firstName);
-                employee.setLastName(lastName);
-                employee.setDateOfBirth(dateOfBirth);
-                employee.setExperience(experience);
 
-
-                tempList.add(new Employee(employee));
+                tempList.add(employee);
             }
             MyCollection.addAll(tempList);
-        } catch (IOException | ParseException e) {
+        } catch (ParseException e) {
+            System.out.println("Caught ParseException: " + e.getMessage());
+            throw new RuntimeException("Date parsing failed", e);
 
-            System.out.println(e);
+        } catch (IOException e) {
+            System.out.println("Caught IOException: " + e.getMessage());
+            throw new RuntimeException("Error in Reading Jsonfile", e);
         }
+
+
     }
 
 
@@ -100,7 +99,7 @@ public class JsonFileHandler implements MyFileHandler {
                         person.getFirstName(),
                         person.getLastName(),
                         new SimpleDateFormat("MM/dd/yyyy").format(person.getDateOfBirth()),
-                        (int)person.getExperience()
+                        (int) person.getExperience()
                 );
 
                 writer.write(jsonRecord);
@@ -111,7 +110,8 @@ public class JsonFileHandler implements MyFileHandler {
             }
             writer.write("]");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Caught IOException: " + e.getMessage());
+            throw new RuntimeException("Error in writing JsonFile", e);
         }
     }
 

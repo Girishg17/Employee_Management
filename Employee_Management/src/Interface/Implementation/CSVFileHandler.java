@@ -28,16 +28,15 @@ public class CSVFileHandler implements MyFileHandler {
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
             while ((line = br.readLine()) != null) {
-                // Split the line into parts
+
                 String[] parts = line.split(",");
 
-                // Skip header or lines with insufficient parts
-                if (parts.length < 4) {
+
+                if (parts.length != 4) {
                     System.out.println("Skipping line due to insufficient data: " + line);
                     continue;
                 }
 
-                // Extract firstName and check for header
                 String firstName = parts[0].trim();
                 if (firstName.equals("firstName")) {
                     continue; // Skip header line
@@ -55,8 +54,7 @@ public class CSVFileHandler implements MyFileHandler {
                 employee.setDateOfBirth(dateOfBirth);
                 employee.setExperience(experience);
 
-                // Add to temporary list
-                tempList.add(new Employee(employee));
+                tempList.add(employee);
             }
 
             // Add all employees to MyCollection at once
@@ -64,10 +62,13 @@ public class CSVFileHandler implements MyFileHandler {
 
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
+            throw new RuntimeException(e);
         } catch (ParseException e) {
             System.out.println("ParseException: " + e.getMessage());
+            throw new RuntimeException(e);
         } catch (NumberFormatException e) {
             System.out.println("NumberFormatException: " + e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
@@ -81,6 +82,7 @@ public class CSVFileHandler implements MyFileHandler {
             for (int i = 0; i < 100; i++) {
                 person = MyCollection.get();
 
+                assert person != null;
                 String csvRecord = String.format(
                         "%s,%s,%s,%d\n",
                         person.getFirstName(),

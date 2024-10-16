@@ -57,14 +57,18 @@ public class XMLFileHandler implements MyFileHandler {
                 employee.setDateOfBirth(dateOfBirth);
                 employee.setExperience(experience);
 
-              
-                tempList.add(new Employee(employee));
+
+                tempList.add(employee);
 
                 startIndex = endIndex + endRecordTag.length();
             }
             MyCollection.addAll(tempList);
-        } catch (IOException | ParseException e) {
-            System.out.println(e);
+        } catch (IOException e) {
+            throw new RuntimeException("Error While Reading File",e);
+        }
+        catch (ParseException e){
+            System.out.println("Caught ParseException: " + e.getMessage());
+            throw new RuntimeException("Date parsing failed", e);
         }
     }
 
@@ -81,7 +85,7 @@ public class XMLFileHandler implements MyFileHandler {
         SimpleDateFormat dateFormat=new SimpleDateFormat("MM/dd/yyyy");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/girishggonda/Desktop/output.xml"))) {
             Employee person;
-            for (int i = 200; i < 300; i++) {
+            for (int i = 0; i < 100; i++) {
                 person = MyCollection.get();
                 writer.write("  <record>\n    <firstName>" + person.firstName + "</firstName>\n    <lastName>" + person.lastName + "</lastName>\n    <dateOfBirth>" + dateFormat.format(person.dateOfBirth) + "</dateOfBirth>\n    <experience>" +(int) person.experience + "</experience>\n  </record>\n");
             }
