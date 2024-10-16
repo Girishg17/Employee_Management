@@ -30,7 +30,7 @@ public class MyCollection {
                 writeCounter++;
             } else {
                 System.out.println("Employee array is full. Cannot add more employees.");
-                break; // Exit if the array is full
+                break;
             }
         }
     }

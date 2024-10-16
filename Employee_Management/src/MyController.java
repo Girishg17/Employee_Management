@@ -10,7 +10,7 @@ public class MyController {
     private MyFileHandler xmlHandler = new XMLFileHandler("/Users/girishggonda/Downloads/dataset.xml");
     private MyFileHandler jsonHandler = new JsonFileHandler("/Users/girishggonda/Downloads/MOCK_DATA.json");
 
-    public void loadData() throws InterruptedException {
+    public void loadData()  {
         Thread csvThread = new Thread(() -> csvHandler.read());
         Thread xmlThread = new Thread(() -> xmlHandler.read());
         Thread jsonThread = new Thread(() -> jsonHandler.read());
@@ -18,10 +18,14 @@ public class MyController {
         csvThread.start();
         xmlThread.start();
         jsonThread.start();
+        try {
+            csvThread.join();
+            xmlThread.join();
+            jsonThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        csvThread.join();
-        xmlThread.join();
-        jsonThread.join();
 
         System.out.println("Write Counter " + collection.getWriteCounter());
     }

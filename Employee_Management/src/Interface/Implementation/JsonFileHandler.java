@@ -96,11 +96,11 @@ public class JsonFileHandler implements MyFileHandler {
                 person = MyCollection.get();
 //                System.out.println("lastname ->"+person.lastName);
                 String jsonRecord = String.format(
-                        "{\"firstName\":\"%s\", \"lastName\":\"%s\", \"dateOfBirth\":\"%s\", \"experience\":%f}",
+                        "{\"firstName\":\"%s\", \"lastName\":\"%s\", \"dateOfBirth\":\"%s\", \"experience\":%d}",
                         person.getFirstName(),
                         person.getLastName(),
                         new SimpleDateFormat("MM/dd/yyyy").format(person.getDateOfBirth()),
-                        person.getExperience()
+                        (int)person.getExperience()
                 );
 
                 writer.write(jsonRecord);

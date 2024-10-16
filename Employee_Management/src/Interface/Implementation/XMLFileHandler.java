@@ -20,8 +20,8 @@ public class XMLFileHandler implements MyFileHandler {
 
 
     public void read() {
-        Employee employee = new Employee(); // Create a single instance to reuse
-        List<Employee> tempList = new ArrayList<>(); // Temporary list to hold employees
+        Employee employee = new Employee();
+        List<Employee> tempList = new ArrayList<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             String line;
@@ -57,7 +57,7 @@ public class XMLFileHandler implements MyFileHandler {
                 employee.setDateOfBirth(dateOfBirth);
                 employee.setExperience(experience);
 
-                // Add to temporary list
+              
                 tempList.add(new Employee(employee));
 
                 startIndex = endIndex + endRecordTag.length();
@@ -78,12 +78,12 @@ public class XMLFileHandler implements MyFileHandler {
 
 
     public void write() {
-
+        SimpleDateFormat dateFormat=new SimpleDateFormat("MM/dd/yyyy");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/girishggonda/Desktop/output.xml"))) {
             Employee person;
             for (int i = 200; i < 300; i++) {
                 person = MyCollection.get();
-                writer.write("  <record>\n    <firstName>" + person.firstName + "</firstName>\n    <lastName>" + person.lastName + "</lastName>\n    <dateOfBirth>" + (new SimpleDateFormat("MM/dd/yyyy")).format(person.dateOfBirth) + "</dateOfBirth>\n    <experience>" + person.experience + "</experience>\n  </record>\n");
+                writer.write("  <record>\n    <firstName>" + person.firstName + "</firstName>\n    <lastName>" + person.lastName + "</lastName>\n    <dateOfBirth>" + dateFormat.format(person.dateOfBirth) + "</dateOfBirth>\n    <experience>" +(int) person.experience + "</experience>\n  </record>\n");
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
